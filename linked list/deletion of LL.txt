@@ -1,0 +1,76 @@
+#include<bits/stdc++.h>
+using namespace std;
+class Node{
+    public:
+    int data;
+    Node*next;
+    Node(int data){
+        this->data=data;
+        this->next=NULL;
+    }
+};
+Node* deletehead(struct Node*head){
+    if(head==NULL){
+        return head;
+    }
+    struct Node*temp=head;
+    temp=head->next;
+    free(head);
+    return temp;
+}
+void insertathead(struct Node*&head,struct Node*&tail,int val){
+    if(head==NULL){
+        struct Node*newNode=new Node(val);
+        head=newNode;
+        tail=newNode;
+    }
+    else{
+        struct Node*newNode=new Node(val);
+        tail->next=newNode;
+        tail=newNode;
+    }
+}
+void print(struct Node*&head){
+    struct Node *temp=head;
+    while(temp){
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }
+}
+struct Node* deletetail(struct Node*head){
+    if(head==NULL){
+        return head;
+    }
+    if(head->next==NULL){
+        return NULL;
+    }
+    struct Node*temp=head;
+    while(temp->next->next!=NULL){
+        temp=temp->next;
+    }
+    free(temp->next);
+    temp->next=NULL;
+    return head;
+}
+int main(){
+    vector<int>arr={1,2,3,4,5,6};
+    //make the linked list
+    struct Node*head=NULL;
+    struct Node*tail=NULL;
+    for(int i=0;i<arr.size();i++){
+        insertathead(head,tail,arr[i]);
+    }
+    //print the linked list
+    cout<<"original linked list"<<endl;
+    print(head);
+    cout<<endl;
+    cout<<"after deleting the first node"<<endl;
+    struct Node*newhead=deletehead(head);
+    print(newhead);
+    cout<<endl;
+    cout<<"after deleting the last node of the linked list"<<endl;
+    struct Node*newhead1=deletetail(newhead);
+    print(newhead1);
+    cout<<endl;
+    return 0;
+}
