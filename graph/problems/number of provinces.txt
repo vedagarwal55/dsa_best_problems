@@ -1,0 +1,38 @@
+problem link::::https://www.geeksforgeeks.org/problems/number-of-provinces/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=number_of_provinces
+
+//solution
+void solve(int node,vector<int>&visited,unordered_map<int,vector<int>>&adj){
+        visited[node]=1;
+        for(auto it:adj[node]){
+            if(!visited[it]){
+                solve(it,visited,adj);
+            }
+        }
+    }
+
+ int numProvinces(vector<vector<int>> adj, int V) {
+        //first make the adjacency list
+        unordered_map<int,vector<int>>newAdj;
+        int row=adj.size();
+        int col=adj[0].size();
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                if(i==j){
+                    continue;
+                }
+                if(adj[i][j]==1){
+                    newAdj[i].push_back(j);
+                }
+            }
+        }
+        //now count the components using dfs
+        vector<int>visited(V,0);
+        int ctr=0;
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+                ctr++;
+                solve(i,visited,newAdj);
+            }
+        }
+        return ctr;
+    }
