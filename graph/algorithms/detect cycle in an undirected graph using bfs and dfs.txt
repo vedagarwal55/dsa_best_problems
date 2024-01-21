@@ -1,0 +1,59 @@
+problem link::::https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=detect-cycle-in-an-undirected-graph
+
+
+//solution
+
+
+bool checkCycleUsingBfs(int val,vector<int>adj[],vector<int>&visited){
+        visited[val]=1;
+        queue<pair<int,int>>q;
+        q.push(make_pair(val,-1));
+        while(!q.empty()){
+            pair<int,int>temp=q.front();
+            q.pop();
+            int node=temp.first;
+            int parent=temp.second;
+            for(auto neighbour:adj[node]){
+                if(!visited[neighbour]){
+                    visited[neighbour]=1;
+                    q.push(make_pair(neighbour,node));
+                }
+                else{
+                    if(parent!=neighbour){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    bool checkCycleUsingDfs(int node,int parent,vector<int>adj[],vector<int>&visited){
+        visited[node]=1;
+        for(auto neighbour:adj[node]){
+            if(!visited[neighbour]){
+                bool ans=checkCycleUsingDfs(neighbour,node,adj,visited);
+                if(ans==true){
+                    return true;
+                }
+            }
+            else{
+                if(neighbour!=parent){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+bool isCycle(int V, vector<int> adj[]) {
+        vector<int>visited(V,0);
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+                // bool ans=checkCycleUsingBfs(i,adj,visited);
+                bool ans=checkCycleUsingDfs(i,-1,adj,visited);
+                if(ans==true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
