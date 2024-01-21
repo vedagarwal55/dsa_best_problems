@@ -1,0 +1,49 @@
+problem link:::https://www.geeksforgeeks.org/problems/number-of-distinct-islands/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=number-of-distinct-islands
+
+
+//solution
+
+
+void bfs(int r,int c,int row,int col,int delrow[],int delcol[],
+    vector<vector<int>>& grid,vector<vector<int>>& visited,
+    set<vector<vector<int>>>&st){
+        visited[r][c]=1;
+        queue<pair<int,int>>q;
+        q.push(make_pair(r,c));
+        vector<vector<int>>finalans;
+        finalans.push_back({r-r,c-c});
+        while(!q.empty()){
+            pair<int,int>temp=q.front();
+            q.pop();
+            int fix_row=temp.first;
+            int fix_col=temp.second;
+            for(int i=0;i<4;i++){
+                int newrow=fix_row+delrow[i];
+                int newcol=fix_col+delcol[i];
+                if(newrow>=0 && newrow<row && newcol>=0 && newcol<col &&
+                !visited[newrow][newcol] && grid[newrow][newcol]==1){
+                    q.push(make_pair(newrow,newcol));
+                    visited[newrow][newcol]=1;
+                    finalans.push_back({newrow-r,newcol-c});
+                }
+            }
+        }
+        st.insert(finalans);
+    }
+  public:
+    int countDistinctIslands(vector<vector<int>>& grid) {
+        int row=grid.size();
+        int col=grid[0].size();
+        vector<vector<int>>visited(row,vector<int>(col,0));
+        set<vector<vector<int>>>st;
+        int delrow[]={-1,0,1,0};
+        int delcol[]={0,1,0,-1};
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                if(grid[i][j]==1 && !visited[i][j]){
+                    bfs(i,j,row,col,delrow,delcol,grid,visited,st);
+                }
+            }
+        }
+        return st.size();
+    }
