@@ -1,0 +1,82 @@
+problem link::::https://www.geeksforgeeks.org/problems/bipartite-graph/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=bipartite-graph
+
+
+solution
+
+//using bfs 
+ bool bfs(int node,vector<int>&visited,vector<int>adj[],vector<int>&color){
+        visited[node]=1;
+        color[node]=0;
+        queue<int>q;
+        q.push(node);
+        while(!q.empty()){
+           int temp=q.front();
+           q.pop();
+            for(auto it:adj[temp]){
+                if(!visited[it]){
+                    q.push(it);
+                    visited[it]=1;
+                    color[it]=!color[temp];
+                }
+                else{
+                    if(color[it]==color[temp]){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+bool isBipartite(int V, vector<int>adj[]){
+	    vector<int>visited(V,0);
+	    vector<int>color(V,0);
+	    for(int i=0;i<V;i++){
+	        if(!visited[i]){
+	            bool ans=bfs(i,visited,adj,color);
+	            if(ans==false){
+	                return false;
+	            }
+	        }
+	    }
+	    return true;
+	}
+
+
+//using dfs
+
+bool dfs(int node,vector<int>&visited,vector<int>&color,vector<int>adj[]){
+        visited[node]=1;
+        for(auto it:adj[node]){
+            if(!visited[it]){
+                //color that node first
+                color[it]=!color[node];
+                bool ans=dfs(it,visited,color,adj);
+                if(ans==false){
+                    return false;
+                }
+            }
+            else{
+                if(color[it]==color[node]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+bool isBipartite(int V, vector<int>adj[]){
+	    //using dfs
+	    vector<int>visited(V,0);
+	    vector<int>color(V);
+	    for(int i=0;i<V;i++){
+	        if(!visited[i]){
+	            color[i]=0;
+	            bool ans=dfs(i,visited,color,adj);
+	            if(ans==false){
+	                return false;
+	            }
+	        }
+	    }
+	    return true;
+	}
