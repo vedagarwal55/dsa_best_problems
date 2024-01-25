@@ -1,0 +1,45 @@
+problem link:::::https://www.geeksforgeeks.org/problems/eventual-safe-states/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=eventual-safe-states
+
+
+solution
+
+
+bool dfs(int node,vector<int>&visited,vector<int>&dfsVisited,vector<int>&check,
+    vector<int>adj[]){
+        visited[node]=1;
+        dfsVisited[node]=1;
+        for(auto it:adj[node]){
+            if(!visited[it]){
+                bool ans=dfs(it,visited,dfsVisited,check,adj);
+                if(ans==true){
+                    return true;
+                }
+            }
+            else{
+                if(visited[it]==true && dfsVisited[it]==true){
+                    return true;
+                }
+            }
+        }
+        check[node]=1;
+        dfsVisited[node]=0;
+        return false;
+    }
+
+ vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
+        vector<int>finalans;
+        vector<int>visited(V,0);
+        vector<int>dfsVisited(V,0);
+        vector<int>check(V,0);
+        for(int i=0;i<V;i++){
+            if(!visited[i]){
+                dfs(i,visited,dfsVisited,check,adj);
+            }
+        }
+        for(int i=0;i<V;i++){
+            if(check[i]==1){
+                finalans.push_back(i);
+            }
+        }
+        return finalans;
+    }

@@ -1,0 +1,65 @@
+problem link::::https://www.geeksforgeeks.org/problems/topological-sort/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=topological-sort
+
+
+//solution using dfs
+
+void dfs(int node,vector<int>&visited,vector<int>adj[],stack<int>&st){
+        visited[node]=1;
+        for(auto it:adj[node]){
+            if(!visited[it]){
+                dfs(it,visited,adj,st);
+            }
+        }
+        st.push(node);
+    }
+	public:
+	//Function to return list containing vertices in Topological order. 
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<int>finalans;
+	    stack<int>st;
+	    vector<int>visited(V,0);
+	    for(int i=0;i<V;i++){
+	        if(!visited[i]){
+	            dfs(i,visited,adj,st);
+	        }
+	    }
+	    while(!st.empty()){
+	        int node=st.top();
+	        st.pop();
+	        finalans.push_back(node);
+	    }
+	    return finalans;
+	}
+
+
+//solution using bfs 
+
+vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<int>indegree(V);
+	    queue<int>q;
+	    vector<int>finalans;
+	    for(int i=0;i<V;i++){
+	        for(auto it:adj[i]){
+	            indegree[it]++;
+	        }
+	    }
+	    for(int i=0;i<V;i++){
+	        if(indegree[i]==0){
+	            q.push(i);
+	        }
+	    }
+	    while(!q.empty()){
+	        int temp=q.front();
+	        q.pop();
+	        finalans.push_back(temp);
+	        for(auto it:adj[temp]){
+	            indegree[it]--;
+	            if(indegree[it]==0){
+	                q.push(it);
+	            }
+	        }
+	    }
+	    return finalans;
+	}
