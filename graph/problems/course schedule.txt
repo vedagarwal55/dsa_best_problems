@@ -1,0 +1,42 @@
+problem link:::::https://www.geeksforgeeks.org/problems/course-schedule/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=course-schedule
+
+
+solution
+
+
+vector<int> findOrder(int n, int m, vector<vector<int>> prerequisites) 
+    {
+         unordered_map<int,vector<int>>adj;
+	    for(auto it:prerequisites){
+	        adj[it[1]].push_back(it[0]);
+	    }
+	    //now check the cycle condition
+	    vector<int>indegree(n);
+	    queue<int>q;
+	    vector<int>finalans;
+	    for(int i=0;i<n;i++){
+	        for(auto it:adj[i]){
+	            indegree[it]++;
+	        }
+	    }
+	    for(int i=0;i<n;i++){
+	        if(indegree[i]==0){
+	            q.push(i);
+	        }
+	    }
+	    while(!q.empty()){
+	        int temp=q.front();
+	        q.pop();
+	        finalans.push_back(temp);
+	        for(auto it:adj[temp]){
+	            indegree[it]--;
+	            if(indegree[it]==0){
+	                q.push(it);
+	            }
+	        }
+	    }
+	    if(finalans.size()==n){
+	        return finalans;
+	    }
+	    return {};
+    }
