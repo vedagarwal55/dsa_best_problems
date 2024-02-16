@@ -1,0 +1,75 @@
+problem link:::::https://www.codingninjas.com/studio/problems/complete-string_2687860?utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_tries_videos&leftPanelTabValue=SUBMISSION
+
+
+//solution
+
+#include <bits/stdc++.h> 
+struct Node{
+    Node *children[26];
+    bool isendofword;
+    Node(){
+        for(int i=0;i<26;i++){
+            this->children[i]=NULL;
+        }
+        this->isendofword=false;
+    }
+};
+void insertWord(struct Node*&root,string word){
+    struct Node*temp=root;
+    for(int i=0;i<word.length();i++){
+        char ch=word[i];
+        int idx=ch-'a';
+        if(temp->children[idx]==NULL){
+            temp->children[idx]=new Node();
+        }
+        temp=temp->children[idx];
+    }
+    temp->isendofword=true;
+}
+bool searchWord(struct Node*root,string word){
+    struct Node*temp=root;
+    for(int i=0;i<word.length();i++){
+        char ch=word[i];
+        int idx=ch-'a';
+        if(temp->children[idx]==NULL){
+            return false;
+        }
+        else{
+            temp=temp->children[idx];
+            if(temp->isendofword==false){
+                return false;
+            }
+        }
+    }
+    if(!temp){
+        return false;
+    }
+    if(temp->isendofword==true){
+        return true;
+    }
+    return false;
+}
+string completeString(int n, vector<string> &a){
+    //phele sabko insert kar lo
+    struct Node*root=new Node();
+    for(auto it:a){
+        insertWord(root,it);
+    }
+    string finalans="";
+    for(auto it:a){
+        if(searchWord(root,it)){
+            if(finalans.length()<it.length()){
+                finalans=it;
+            }
+            else if(finalans.length()==it.length()){
+                if(it<finalans){
+                    finalans=it;
+                }
+            }
+        }
+    }
+    if(finalans.length()==0){
+        return "None";
+    }
+    return finalans;
+}

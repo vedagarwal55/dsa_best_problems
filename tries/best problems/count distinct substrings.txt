@@ -1,0 +1,38 @@
+problem link::::https://www.codingninjas.com/studio/problems/count-distinct-substrings_985292?utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_tries_videos&leftPanelTabValue=SUBMISSION
+
+
+//solution
+
+
+struct Node{
+    Node*children[26];
+    Node(){
+        for(int i=0;i<26;i++){
+            this->children[i]=NULL;
+        }
+    }
+};
+int distinctCount(struct Node*&root,string s){
+    int cnt=0;
+    struct Node*temp=root;
+    for(int i=0;i<s.length();i++){
+        char ch=s[i];
+        int idx=ch-'a';
+        if(temp->children[idx]==NULL){
+            cnt++;
+            temp->children[idx]=new Node();
+        }
+        temp=temp->children[idx];
+    }
+    return cnt;
+}
+int countDistinctSubstrings(string &s)
+{
+    int count=1;
+    struct Node*root=new Node();
+    for(int i=0;i<s.length();i++){
+        string temp=s.substr(i);
+        count=count+distinctCount(root,temp);
+    }
+    return count;
+}
